@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#F7F0E8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Rozpočet">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIlJvenBvXHUwMTBkZXQiLCAic2hvcnRfbmFtZSI6ICJSb3pwb1x1MDEwZGV0IiwgImRlc2NyaXB0aW9uIjogIlNwclx1MDBlMXZjYSBmaW5hbmNpXHUwMGVkIiwgInN0YXJ0X3VybCI6ICIuL2luZGV4Lmh0bWwiLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgImJhY2tncm91bmRfY29sb3IiOiAiIzBmMGYwZiIsICJ0aGVtZV9jb2xvciI6ICIjMGYwZjBmIiwgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwgImljb25zIjogW3sic3JjIjogImljb24tMTkyLnN2ZyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSJ9LCB7InNyYyI6ICJpY29uLTUxMi5zdmciLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLCAicHVycG9zZSI6ICJhbnkgbWFza2FibGUifV19">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI4MCIgZmlsbD0iIzBmMGYwZiIvPjxyZWN0IHg9IjcyIiB5PSI3MiIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZjVlNjQyIi8+PHRleHQgeD0iMjU2IiB5PSIzNjAiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiPlI8L3RleHQ+PC9zdmc+">
+<title>Rozpočet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Bebas+Neue&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    /* ── Palette from user ──
+       #1C0A00  near-black espresso
+       #4A1F1F  dark mahogany
+       #C07B2A  warm amber gold
+       #8FAFC0  steel blue
+       #000000  pure black
+    */
+
+    /* Surfaces */
+    --bg:        #F7F0E8;   /* warm cream derived from palette */
+    --card:      #F0E6D8;
+    --card2:     #EAD9C8;
+    --border:    #E3D9CC;
+    --border-strong: #C9BBAA;
+
+    /* Typography */
+    --text:      #1C0A00;   /* espresso — darkest swatch */
+    --text2:     #4A1F1F;   /* mahogany — second swatch */
+    --muted:     #9A8070;   /* warm mid-tone derived from palette */
+
+    /* Semantic — income/expense stay readable but warm-toned */
+    --green:     #2A7A4A;
+    --green-bg:  #E8F5EE;
+    --red:       #C04040;
+    --red-bg:    #FAEAEA;
+
+    /* Primary accent = amber gold from palette */
+    --amber:     #C07B2A;
+    --amber-bg:  #FDF0DC;
+
+    /* Secondary accent = steel blue from palette */
+    --purple:    #5E8FA8;   /* repurposed as "blue" — fixed expenses etc */
+    --purple-bg: #EBF3F8;
+
+    /* Hero dark = mahogany/espresso */
+    --accent:    #1C0A00;
+    --accent-inv: #F7F0E8;
+
+    /* Elevation — warm brown shadows */
+    --s1: 0 1px 2px rgba(28,10,0,0.06);
+    --s2: 0 2px 8px rgba(28,10,0,0.09), 0 1px 2px rgba(28,10,0,0.05);
+    --s3: 0 8px 24px rgba(28,10,0,0.12), 0 2px 6px rgba(28,10,0,0.06);
+
+    --r: 14px;
+    --r-sm: 9px;
+    --r-lg: 20px;
+  }
+
+  html { font-size: 16px; }
+
+  html { overflow-x: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'SF Pro Text', 'Inter', BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    padding-top: max(env(safe-area-inset-top, 0px) + 12px, 16px);
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  .app { overflow-x: hidden; }
+
+  .app { width: 100%; max-width: 520px; margin: 0 auto; overflow-x: hidden; }
+
+  /* ─────────────────────────────────────────
+     HEADER
+  ───────────────────────────────────────── */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem; letter-spacing: 3px; line-height: 1;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: 16px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--muted); margin-top: 4px;
+  }
+
+  .year-nav { display: flex; align-items: center; gap: 6px; }
+  .year-btn {
+    background: var(--card); border: 1px solid var(--border); color: var(--text2);
+    width: 28px; height: 28px; border-radius: var(--r-sm); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; box-shadow: var(--s1); transition: all 0.12s;
+  }
+  .year-btn:active { transform: scale(0.93); }
+  .year-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; letter-spacing: 2px; color: var(--amber);
+    min-width: 52px; text-align: center;
+  }
+
+  /* ─────────────────────────────────────────
+     VIEW TOGGLE — pill switcher
+  ───────────────────────────────────────── */
+  .view-toggle {
+    display: flex; gap: 3px; margin-bottom: 16px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 3px; box-shadow: var(--s1);
+  }
+  .view-btn {
+    flex: 1; background: transparent; border: none; color: var(--muted);
+    font-size: 16px; letter-spacing: 0.8px; text-transform: uppercase;
+    font-weight: 600; padding: 9px 2px; border-radius: 11px;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .view-btn.active {
+    background: #4A1F1F; color: var(--accent-inv);
+    box-shadow: var(--s2);
+  }
+  .view-btn.active-fixed {
+    background: var(--purple); color: #fff;
+    box-shadow: var(--s2);
+  }
+  .view-btn:not(.active):not(.active-fixed):hover { color: var(--text2); }
+
+  /* ─────────────────────────────────────────
+     MONTH GRID
+  ───────────────────────────────────────── */
+  .month-tabs {
+    display: grid; grid-template-columns: repeat(6,1fr);
+    gap: 5px; margin-bottom: 16px;
+  }
+  .month-tab {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r-sm); color: var(--muted);
+    font-size: 16px; font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase; padding: 10px 2px 13px;
+    cursor: pointer; transition: all 0.15s; text-align: center; position: relative;
+    box-shadow: var(--s1);
+  }
+  .month-tab:active { transform: scale(0.95); }
+  .month-tab.active {
+    background: #4A1F1F; color: var(--amber);
+    border-color: #4A1F1F; box-shadow: var(--s2);
+  }
+  .month-tab .dot {
+    position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
+    width: 3px; height: 3px; border-radius: 50%; background: var(--green); display: none;
+  }
+  .month-tab.has-data .dot { display: block; }
+  .month-tab.active .dot { background: var(--amber); }
+
+  /* ─────────────────────────────────────────
+     BALANCE CARD — the hero element
+  ───────────────────────────────────────── */
+  .balance-strip {
+    background: #1C0A00;
+    border-radius: var(--r-lg); padding: 18px 20px; margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: var(--s3); position: relative; overflow: hidden;
+    margin-top: 4px;
+  }
+  .balance-strip::before {
+    content: ''; position: absolute;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.025);
+    top: -60px; right: -40px;
+  }
+  .balance-strip::after {
+    content: ''; position: absolute;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(255,255,255,0.02);
+    bottom: -50px; left: 20px;
+  }
+  .bal-block { text-align: center; flex: 1; position: relative; z-index: 1; }
+  .bal-label {
+    font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 6px; font-weight: 600;
+  }
+  .bal-val {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px;
+  }
+  .bal-val.income { color: #5DC98A; }
+  .bal-val.expense { color: #E87878; }
+  .bal-val.total { color: #E8A84A; }
+  .divider { width: 1px; height: 38px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+
+  /* ─────────────────────────────────────────
+     INPUT CARD
+  ───────────────────────────────────────── */
+  .input-section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 16px; margin-bottom: 14px;
+    box-shadow: var(--s1);
+  }
+  .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .type-btn {
+    border: 1.5px solid var(--border); background: var(--bg); color: var(--muted);
+    font-size: 16px; font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase; padding: 13px; border-radius: var(--r-sm);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .type-btn:active { transform: scale(0.97); }
+  .type-btn.active.income-btn {
+    background: var(--green); border-color: var(--green); color: #fff;
+    box-shadow: 0 2px 12px rgba(29,155,94,0.25);
+  }
+  .type-btn.active.expense-btn {
+    background: var(--red); border-color: var(--red); color: #fff;
+    box-shadow: 0 2px 12px rgba(217,64,64,0.25);
+  }
+
+  .selected-type {
+    font-size: 16px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px; min-height: 14px; font-weight: 500;
+  }
+  .input-row { display: flex; gap: 8px; align-items: stretch; }
+
+  .desc-select, .amount-input {
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: var(--r-sm); color: var(--text);
+    font-size: 16px; padding: 12px 14px; outline: none; transition: all 0.15s;
+  }
+  .desc-select {
+    flex: 1; min-width: 0; cursor: pointer; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23A09D97' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px;
+    background-color: var(--bg);
+  }
+  .desc-select:focus, .amount-input:focus {
+    border-color: var(--text); outline: none;
+    box-shadow: 0 0 0 3px rgba(26,25,22,0.06);
+  }
+  .desc-select option, .desc-select optgroup { background: #fff; color: var(--text); }
+  .amount-input { width: 108px; flex-shrink: 0; }
+
+  .add-btn {
+    background: var(--text); color: var(--accent-inv); border: none;
+    border-radius: var(--r-sm);
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px;
+    padding: 12px 18px; cursor: pointer; flex-shrink: 0;
+    transition: all 0.12s; box-shadow: var(--s2);
+  }
+  .add-btn:active { transform: scale(0.94); opacity: 0.85; }
+
+  /* ─────────────────────────────────────────
+     TRANSACTION LIST
+  ───────────────────────────────────────── */
+  .list-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .list-title {
+    font-size: 16px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text2);
+  }
+  .clear-btn {
+    font-size: 16px; font-weight: 500; color: var(--muted);
+    background: none; border: 1px solid var(--border);
+    padding: 5px 10px; border-radius: var(--r-sm); cursor: pointer; transition: all 0.15s;
+  }
+  .clear-btn:hover { color: var(--red); border-color: var(--red); }
+
+  .transactions {
+    display: flex; flex-direction: column; gap: 6px;
+    max-height: none; overflow-y: visible; padding-right: 0;
+  }
+  .transactions::-webkit-scrollbar { width: 2px; }
+  .transactions::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+  .tx-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 12px 12px 12px 16px; display: flex; justify-content: space-between; align-items: center;
+    animation: slideIn 0.2s ease; box-shadow: var(--s1);
+    position: relative; overflow: hidden;
+  }
+  .tx-item::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+  .tx-item.income::before { background: var(--green); }
+  .tx-item.expense::before { background: var(--red); }
+  .tx-item.fixed-tx::before { background: var(--purple); }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .tx-desc { font-size: 0.92rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tx-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; font-weight: 400; }
+  .tx-meta .fixed-badge { color: var(--purple); margin-left: 4px; font-weight: 600; }
+  .tx-note { font-size: 0.72rem; color: var(--muted); margin-top: 2px; font-style: italic; }
+
+  .tx-amount {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.3px;
+    white-space: nowrap; margin-right: 4px;
+  }
+  .tx-item.income .tx-amount { color: var(--green); }
+  .tx-item.expense .tx-amount, .tx-item.fixed-tx .tx-amount { color: var(--red); }
+  .tx-right { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+  .tx-repeat, .tx-edit, .tx-delete {
+    background: none; border: none; color: var(--border-strong); cursor: pointer;
+    font-size: 13px; padding: 8px 6px; transition: color 0.15s; line-height: 1;
+    flex-shrink: 0;
+  }
+  .tx-repeat:hover { color: var(--green); }
+  .tx-edit:hover   { color: var(--amber); }
+  .tx-delete:hover { color: var(--red); }
+
+  .empty {
+    text-align: center; color: var(--muted); font-size: 16px; padding: 36px 20px;
+    border: 1.5px dashed var(--border-strong); border-radius: var(--r); font-weight: 500;
+  }
+
+  /* ─────────────────────────────────────────
+     SETTINGS BTN + PANEL
+  ───────────────────────────────────────── */
+  .settings-btn {
+    background: var(--card); border: 1px solid var(--border); color: var(--text2);
+    width: 34px; height: 34px; border-radius: var(--r-sm); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0; box-shadow: var(--s1); transition: all 0.12s;
+  }
+  .settings-btn:active { transform: scale(0.93); }
+  .settings-btn.open { background: var(--text); color: var(--accent-inv); border-color: var(--text); }
+
+  .settings-panel {
+    display: none; position: fixed; top: 65px; left: max(18px, calc(50vw - 260px + 18px));
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg);
+    padding: 18px; width: 280px; z-index: 200;
+    box-shadow: var(--s3); animation: modalIn 0.15s ease;
+  }
+  .settings-panel.open { display: block; }
+  .settings-panel-title {
+    font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px; font-weight: 700;
+  }
+  .settings-overlay { display: none; position: fixed; inset: 0; z-index: 199; }
+  .settings-overlay.open { display: block; }
+
+  /* ─────────────────────────────────────────
+     EDIT MODAL
+  ───────────────────────────────────────── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(26,25,22,0.5); backdrop-filter: blur(4px);
+    z-index: 100; align-items: flex-end; justify-content: center; padding: 0;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card); border-top: 1px solid var(--border);
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    padding: 24px 20px calc(env(safe-area-inset-bottom,0px) + 24px);
+    width: 100%; max-width: 520px;
+    animation: sheetIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes modalIn { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+  @keyframes sheetIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 20px; color: var(--text); }
+  .modal-field { margin-bottom: 14px; }
+  .modal-label { font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; display: block; font-weight: 600; }
+  .modal-select, .modal-input, .modal-note {
+    width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: var(--r-sm); color: var(--text);
+    font-size: 16px; padding: 12px 13px; outline: none; transition: all 0.15s;
+  }
+  .modal-select { cursor: pointer; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23A09D97' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; background-color: var(--bg); }
+  .modal-select option { background: #fff; }
+  .modal-note { resize: none; min-height: 64px; }
+  .modal-select:focus, .modal-input:focus, .modal-note:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(26,25,22,0.06); }
+  .modal-btns { display: flex; gap: 8px; margin-top: 20px; }
+  .modal-save { flex: 1; background: var(--text); color: var(--accent-inv); border: none; border-radius: var(--r-sm); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; padding: 14px; cursor: pointer; transition: opacity 0.15s; }
+  .modal-save:active { opacity: 0.75; }
+  .modal-cancel { background: var(--bg); border: 1.5px solid var(--border); color: var(--text2); font-size: 16px; font-weight: 500; padding: 14px 18px; border-radius: var(--r-sm); cursor: pointer; transition: all 0.15s; }
+  .modal-cancel:hover { border-color: var(--border-strong); }
+
+  /* ─────────────────────────────────────────
+     CATEGORY LIST
+  ───────────────────────────────────────── */
+  .cat-list-section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r); margin-bottom: 14px; overflow: hidden; box-shadow: var(--s1); width: 100%;
+  }
+  .cat-list-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px; cursor: pointer; user-select: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.15s;
+  }
+  .cat-list-header.open { border-bottom-color: var(--border); }
+  .cat-list-header-left { display: flex; align-items: center; gap: 8px; }
+  .cat-list-title { font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .cat-list-active-label { font-size: 16px; color: var(--amber); font-weight: 600; }
+  .cat-list-chevron { color: var(--muted); font-size: 16px; transition: transform 0.2s; }
+  .cat-list-header.open .cat-list-chevron { transform: rotate(180deg); }
+  .cat-list-clear { background: none; border: none; color: var(--muted); font-size: 16px; font-weight: 600; cursor: pointer; transition: color 0.15s; padding: 0; }
+  .cat-list-clear:hover { color: var(--red); }
+
+  .cat-scroll-list { display: none; max-height: 230px; overflow-y: auto; padding: 4px 0; }
+  .cat-scroll-list.open { display: block; }
+  .cat-scroll-list::-webkit-scrollbar { width: 2px; }
+  .cat-scroll-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+  .cat-row { display: flex; align-items: center; padding: 10px 16px; cursor: pointer; transition: background 0.1s; gap: 10px; }
+  .cat-group-row { border-bottom: 1px solid var(--border); }
+  .cat-sub-row { padding-left: 14px; background: var(--card2); }
+  .cat-row:hover { background: var(--bg); }
+  .cat-row.active { background: #F0EDE8; }
+  .cat-row-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .cat-row-name { flex: 1; font-size: 16px; font-weight: 500; color: var(--text); }
+  .cat-row.active .cat-row-name { color: var(--amber); font-weight: 600; }
+  .cat-row-count { font-size: 16px; color: var(--muted); margin-right: 4px; }
+  .cat-row-sum { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.5px; }
+  .cat-row.active .cat-row-sum { color: var(--amber); }
+
+  .cat-detail-strip {
+    display: none; background: #F0EDE8; border: 1px solid #DDD9D0;
+    border-radius: var(--r-sm); padding: 11px 14px; margin-bottom: 10px;
+    align-items: center; justify-content: space-between;
+  }
+  .cat-detail-strip.visible { display: flex; }
+  .cat-detail-name { font-size: 16px; color: var(--amber); font-weight: 600; }
+  .cat-detail-sum { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--red); letter-spacing: 0.5px; }
+  .cat-detail-count { font-size: 16px; color: var(--muted); margin-top: 2px; }
+
+  /* ─────────────────────────────────────────
+     PIE CHART
+  ───────────────────────────────────────── */
+  .pie-section {
+    margin-top: 14px; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 18px; cursor: pointer;
+    transition: box-shadow 0.2s; box-shadow: var(--s1);
+  }
+  .pie-section:hover { box-shadow: var(--s2); }
+  .pie-section-title { font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .pie-expand-hint { font-size: 16px; color: var(--muted); letter-spacing: 0.5px; }
+  .pie-tabs { display: flex; gap: 5px; margin-bottom: 16px; }
+  .pie-tab {
+    font-size: 16px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border);
+    background: none; color: var(--muted); cursor: pointer; transition: all 0.15s;
+  }
+  .pie-tab.active-expense { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+  .pie-tab.active-income  { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+  .pie-layout { display: flex; gap: 16px; align-items: center; }
+  .pie-wrap { position: relative; flex-shrink: 0; }
+  .pie-wrap canvas { display: block; }
+  .pie-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+  .pie-center-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.5px; color: var(--text); }
+  .pie-center-lbl { font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-top: 2px; font-weight: 600; }
+  .pie-legend { flex: 1; display: flex; flex-direction: column; gap: 7px; overflow-y: auto; max-height: 180px; }
+  .pie-legend::-webkit-scrollbar { width: 2px; }
+  .pie-legend::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .legend-name { font-size: 16px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text2); font-weight: 500; }
+  .legend-pct { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--text2); letter-spacing: 0.5px; }
+  .legend-amt { font-size: 16px; color: var(--muted); margin-left: 3px; }
+  .pie-empty { text-align: center; color: var(--muted); font-size: 16px; padding: 20px 0; font-weight: 500; }
+
+  /* ─────────────────────────────────────────
+     PIE FULLSCREEN MODAL
+  ───────────────────────────────────────── */
+  .pie-modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: var(--bg); z-index: 300;
+    flex-direction: column; overflow-y: auto;
+    padding: 0 18px;
+  }
+  .pie-modal-overlay.open { display: flex; }
+  .pie-modal-inner {
+    flex: 1; display: flex; flex-direction: column;
+    padding-top: max(env(safe-area-inset-top,0px) + 20px, 28px);
+    padding-bottom: calc(env(safe-area-inset-bottom,0px) + 36px);
+    max-width: 520px; margin: 0 auto; width: 100%;
+  }
+  .pie-modal-legend-item { padding: 14px 0; }
+  .pie-modal-legend-name { font-size: 0.95rem; }
+  .pie-modal-legend-pct  { font-size: 1.1rem; }
+  .pie-modal-legend-amt  { font-size: 0.75rem; margin-top: 3px; }
+  .pie-modal-legend-bar-wrap { width: 80px; height: 4px; }
+  .pie-modal-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .pie-modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--text); }
+  .pie-modal-close {
+    background: var(--card); border: 1px solid var(--border); color: var(--text2);
+    width: 34px; height: 34px; border-radius: var(--r-sm); cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--s1); transition: all 0.12s;
+  }
+  .pie-modal-close:active { transform: scale(0.93); }
+  .pie-modal-tabs { display: flex; gap: 6px; margin-bottom: 22px; }
+  .pie-modal-tab { font-size: 16px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: none; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .pie-modal-tab.active-expense { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+  .pie-modal-tab.active-income  { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+  .pie-modal-canvas-wrap { display: flex; justify-content: center; margin-bottom: 28px; position: relative; }
+  .pie-modal-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+  .pie-modal-center-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 1px; }
+  .pie-modal-center-lbl { font-size: 16px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 2px; font-weight: 600; }
+  .pie-modal-legend { display: flex; flex-direction: column; }
+  .pie-modal-legend-item { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+  .pie-modal-legend-item:last-child { border-bottom: none; }
+  .pie-modal-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .pie-modal-legend-name { flex: 1; font-size: 16px; font-weight: 500; color: var(--text); }
+  .pie-modal-legend-bar-wrap { width: 70px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .pie-modal-legend-bar { height: 100%; border-radius: 2px; }
+  .pie-modal-legend-right { text-align: right; }
+  .pie-modal-legend-pct { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.5px; }
+  .pie-modal-legend-amt { font-size: 16px; color: var(--muted); margin-top: 2px; }
+
+  /* ─────────────────────────────────────────
+     FIXED EXPENSES
+  ───────────────────────────────────────── */
+  .fixed-view { display: none; }
+  .fixed-view.visible { display: block; }
+  .fixed-header-info {
+    background: var(--purple-bg); border: 1px solid rgba(107,79,187,0.15);
+    border-radius: var(--r); padding: 14px 16px; margin-bottom: 16px;
+    font-size: 16px; color: var(--purple); line-height: 1.6; font-weight: 500;
+  }
+  .fixed-header-info strong { color: var(--purple); font-weight: 700; }
+  .fixed-total-strip {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+    padding: 14px 18px; margin-bottom: 16px;
+    display: flex; justify-content: space-between; align-items: center; box-shadow: var(--s1);
+  }
+  .fixed-total-label { font-size: 16px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .fixed-total-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; color: var(--purple); }
+  .fixed-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+  .fixed-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-left: 3px solid var(--purple); border-radius: var(--r);
+    padding: 12px 14px; display: flex; align-items: center; gap: 10px; box-shadow: var(--s1);
+  }
+  .fixed-item-name { flex: 1; font-size: 16px; font-weight: 500; color: var(--text); }
+  .fixed-item-input {
+    width: 110px; background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: var(--r-sm); color: var(--text);
+    font-size: 16px; padding: 8px 10px; outline: none; text-align: right; transition: all 0.15s;
+  }
+  .fixed-item-input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(107,79,187,0.1); }
+  .fixed-item-input::placeholder { color: var(--muted); }
+  .fixed-currency { font-size: 16px; color: var(--muted); flex-shrink: 0; }
+  .fixed-toggle {
+    width: 38px; height: 22px; border-radius: 11px; border: 1.5px solid var(--border);
+    background: var(--bg); cursor: pointer; position: relative; transition: all 0.2s; flex-shrink: 0;
+  }
+  .fixed-toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px; border-radius: 50%; background: var(--muted); transition: all 0.2s;
+  }
+  .fixed-toggle.on { background: rgba(94,143,168,0.15); border-color: var(--purple); }
+  .fixed-toggle.on::after { left: 18px; background: var(--purple); }
+  .fixed-item-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; padding: 4px; transition: color 0.15s; }
+  .fixed-item-del:hover { color: var(--red); }
+  .fixed-add-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .fixed-new-name {
+    flex: 1; background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--r-sm);
+    color: var(--text); font-size: 16px; padding: 11px 13px; outline: none; transition: all 0.15s;
+  }
+  .fixed-new-name:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(107,79,187,0.1); }
+  .fixed-new-name::placeholder { color: var(--muted); }
+  .fixed-add-new-btn {
+    background: var(--purple-bg); border: 1.5px solid var(--purple); color: var(--purple);
+    font-size: 1.3rem; font-weight: 700; width: 42px; height: 42px;
+    border-radius: var(--r-sm); cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fixed-add-new-btn:active { transform: scale(0.93); }
+  .fixed-save-btn {
+    width: 100%; background: var(--text); color: var(--accent-inv); border: none;
+    border-radius: var(--r-sm); font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; letter-spacing: 2px; padding: 15px; cursor: pointer; transition: opacity 0.15s;
+  }
+  .fixed-save-btn:active { opacity: 0.75; }
+
+  /* ─────────────────────────────────────────
+     YEARLY VIEW
+  ───────────────────────────────────────── */
+  .yearly-view { display: none; overflow-x: hidden; width: 100%; }
+  .yearly-view.visible { display: block; }
+  .year-totals { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 16px; width: 100%; min-width: 0; }
+  .yt-block { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 6px; text-align: center; box-shadow: var(--s1); min-width: 0; overflow: hidden; }
+  .yt-label { font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+  .yt-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .yt-val.income { color: var(--green); }
+  .yt-val.expense { color: var(--red); }
+  .yt-val.total { color: var(--amber); }
+  .month-table { width: 100%; border-collapse: collapse; }
+  .month-table th { font-size: 16px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); padding: 0 8px 10px; text-align: right; font-weight: 700; }
+  .month-table th:first-child { text-align: left; }
+  .month-table tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; }
+  .month-table tr:last-child { border-bottom: none; }
+  .month-table tbody tr:hover { background: var(--bg); }
+  .month-table td { padding: 11px 8px; font-size: 16px; text-align: right; }
+  .month-table td:first-child { text-align: left; color: var(--text); font-weight: 500; }
+  .month-table td.val-income { color: var(--green); font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.5px; }
+  .month-table td.val-expense { color: var(--red); font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.5px; }
+  .month-table td.val-balance { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.5px; }
+  .month-table td.val-balance.pos { color: var(--green); }
+  .month-table td.val-balance.neg { color: var(--red); }
+  .month-table td.val-balance.zero { color: var(--muted); }
+  .month-table tr.empty-row td { color: var(--muted); font-size: 16px; }
+  .month-table tr.current-month td:first-child { color: var(--amber); font-weight: 700; }
+  .bar-cell { width: 56px; padding: 11px 8px !important; }
+  .bar-wrap { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; background: var(--red); }
+
+  /* ─────────────────────────────────────────
+     BACKUP + MISC
+  ───────────────────────────────────────── */
+  .backup-section { margin-top: 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px; box-shadow: var(--s1); }
+  .backup-title { font-size: 16px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 700; }
+  .backup-btns { display: flex; gap: 8px; }
+  .backup-btn { flex: 1; padding: 12px 10px; border-radius: var(--r-sm); cursor: pointer; font-size: 16px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s; text-align: center; border: 1.5px solid var(--border); }
+  .backup-btn.export { background: var(--amber-bg); color: var(--amber); border-color: rgba(201,122,26,0.25); }
+  .backup-btn.export:hover { background: #FCEBD4; }
+  .backup-btn.import { background: var(--green-bg); color: var(--green); border-color: rgba(29,155,94,0.2); }
+  .backup-btn.import:hover { background: #D6F5E7; }
+  .backup-info { font-size: 16px; color: var(--muted); margin-top: 10px; line-height: 1.6; font-weight: 400; }
+  #importFileInput { display: none; }
+
+  .add-cat-row { display: none; gap: 6px; align-items: center; margin-top: 6px; }
+  .add-cat-row.visible { display: flex; }
+  .cat-name-input { flex: 1; background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--r-sm); color: var(--text); font-size: 16px; padding: 10px 12px; outline: none; transition: all 0.15s; }
+  .cat-name-input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(201,122,26,0.1); }
+  .cat-name-input::placeholder { color: var(--muted); }
+  .cat-confirm-btn { background: var(--text); color: var(--accent-inv); border: none; border-radius: var(--r-sm); font-size: 16px; font-weight: 700; padding: 10px 14px; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
+  .cat-confirm-btn:active { opacity: 0.75; }
+  .cat-cancel-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text2); font-size: 16px; padding: 10px 12px; border-radius: var(--r-sm); cursor: pointer; transition: all 0.15s; }
+
+  /* Custom cat filter period toggle */
+  .cat-period-toggle { display: none; }
+
+  /* Yearly yCatDetailStrip */
+  #yCatDetailStrip { background: #F0EDE8; border: 1px solid #DDD9D0; border-radius: var(--r-sm); padding: 11px 14px; align-items: center; justify-content: space-between; }
+
+  .flash { animation: flash 0.3s ease; }
+  @keyframes flash { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: calc(env(safe-area-inset-bottom,0px) + 24px); left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text); color: var(--accent-inv);
+    font-size: 0.85rem; font-weight: 600; padding: 10px 20px;
+    border-radius: 20px; z-index: 400; white-space: nowrap;
+    box-shadow: var(--s3); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+    opacity: 0; pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ── CUSTOM CONFIRM ── */
+  .confirm-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); backdrop-filter: blur(3px);
+    z-index: 350; align-items: flex-end; justify-content: center; padding: 0;
+  }
+  .confirm-overlay.open { display: flex; }
+  .confirm-sheet {
+    background: var(--card); border-radius: var(--r-lg) var(--r-lg) 0 0;
+    padding: 24px 20px calc(env(safe-area-inset-bottom,0px) + 20px);
+    width: 100%; max-width: 520px;
+    animation: sheetIn 0.25s cubic-bezier(0.34,1.4,0.64,1);
+  }
+  .confirm-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1.5px; color: var(--text); margin-bottom: 6px; }
+  .confirm-desc  { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+  .confirm-btns  { display: flex; gap: 8px; }
+  .confirm-ok {
+    flex: 1; padding: 14px; border: none; border-radius: var(--r-sm);
+    background: var(--red); color: #fff;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .confirm-ok:active { opacity: 0.75; }
+  .confirm-cancel {
+    padding: 14px 20px; border: 1.5px solid var(--border); border-radius: var(--r-sm);
+    background: none; color: var(--text2); font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+
+  /* ── NUMBER COUNT-UP ANIMATION ── */
+  .bal-val { transition: color 0.3s ease; }
+  @keyframes numPop { 0%{transform:scale(1)} 40%{transform:scale(1.08)} 100%{transform:scale(1)} }
+  .num-pop { animation: numPop 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+
+  /* ── REPEAT BUTTON on tx ── */
+  .tx-repeat {
+    background: none; border: none; color: var(--muted); cursor: pointer;
+    font-size: 16px; padding: 4px; transition: color 0.15s;
+  }
+  .tx-repeat:hover { color: var(--green); }
+
+  /* ── COMPARISON BADGE ── */
+  .compare-bar {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 16px; margin-bottom: 14px;
+    box-shadow: var(--s1); display: flex; align-items: center; gap: 10px;
+  }
+  .compare-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .compare-text { flex: 1; font-size: 16px; color: var(--text2); line-height: 1.4; }
+  .compare-text strong { color: var(--text); font-weight: 700; }
+  .compare-text .up   { color: var(--red); font-weight: 700; }
+  .compare-text .down { color: var(--green); font-weight: 700; }
+  .compare-text .same { color: var(--muted); font-weight: 600; }
+
+  /* ── DARK MODE ── */
+  body.dark {
+    --bg:        #140C06;
+    --card:      #1E140C;
+    --card2:     #251A10;
+    --border:    #33200F;
+    --border-strong: #4A2E14;
+    --text:      #F0E6D8;
+    --text2:     #C4A882;
+    --muted:     #7A6050;
+    --green:     #3DBF72;
+    --green-bg:  #0D2B1A;
+    --red:       #E05555;
+    --red-bg:    #2B0D0D;
+    --amber:     #D4883A;
+    --amber-bg:  #2B1A06;
+    --purple:    #7AAFC0;
+    --purple-bg: #0D1E26;
+    --accent:    #F0E6D8;
+    --accent-inv: #140C06;
+    --s1: 0 1px 2px rgba(0,0,0,0.3);
+    --s2: 0 2px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2);
+    --s3: 0 8px 24px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+  }
+  body.dark .balance-strip { background: #0A0604; }
+  body.dark .month-tab.active { background: #33200F; border-color: var(--amber); }
+  body.dark .view-btn.active { background: #33200F; }
+  body.dark .desc-select option, body.dark .desc-select optgroup { background: #1E140C; }
+  body.dark .modal-select option { background: #1E140C; }
+  body.dark .modal-overlay { background: rgba(0,0,0,0.75); }
+  body.dark .pie-modal-overlay { background: var(--bg); }
+
+  /* Dark mode toggle btn */
+  .dark-toggle {
+    display: flex; align-items: center; gap: 8px; margin-top: 16px;
+    padding-top: 14px; border-top: 1px solid var(--border);
+    cursor: pointer; user-select: none;
+  }
+  .dark-toggle-label { font-size: 16px; color: var(--text2); font-weight: 500; flex: 1; }
+  .dark-switch {
+    width: 42px; height: 24px; border-radius: 12px; background: var(--border);
+    position: relative; transition: background 0.2s; flex-shrink: 0;
+  }
+  .dark-switch::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--muted); transition: all 0.2s;
+  }
+  .dark-toggle.on .dark-switch { background: var(--amber); }
+  .dark-toggle.on .dark-switch::after { left: 21px; background: #fff; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <h1>Rozpočet</h1>
+        <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()" title="Nastavenia" style="margin-bottom:4px">⚙</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:2px;">
+        <div class="subtitle">Správca financií</div>
+        <div style="width:1px;height:10px;background:var(--border)"></div>
+        <div class="year-nav" id="yearNav">
+          <button class="year-btn" onclick="changeYear(-1)">‹</button>
+          <div class="year-label" id="yearLabel"></div>
+          <button class="year-btn" onclick="changeYear(1)">›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings overlay + panel -->
+  <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-panel-title">Nastavenia · Záloha</div>
+    <div class="backup-btns" style="flex-direction:column;">
+      <button class="backup-btn export" onclick="exportData()">⬇ Exportovať zálohu (JSON)</button>
+      <button class="backup-btn import" style="margin-top:8px" onclick="document.getElementById('importFileInput').click()">⬆ Importovať zálohu (JSON)</button>
+      <input type="file" id="importFileInput" accept=".json" onchange="importData(event)" />
+    </div>
+    <div class="backup-info" style="margin-top:10px">Export uloží všetky dáta do súboru. Import prepíše aktuálne dáta.</div>
+    <div class="dark-toggle" id="darkToggle" onclick="toggleDark()">
+      <span class="dark-toggle-label">🌙 Tmavý režim</span>
+      <div class="dark-switch"></div>
+    </div>
+    <button onclick="clearMonthFromSettings()" style="margin-top:14px;width:100%;padding:11px;border-radius:var(--r-sm);border:1.5px solid var(--red);background:var(--red-bg);color:var(--red);font-size:16px;font-weight:600;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-bg)';this.style.color='var(--red)'">🗑 Vymazať aktuálny mesiac</button>
+  </div>
+
+  <div class="view-toggle">
+    <button class="view-btn active"       id="btnMonthly" onclick="setView('monthly')">Mesačný</button>
+    <button class="view-btn"              id="btnYearly"  onclick="setView('yearly')">Ročný</button>
+    <button class="view-btn"              id="btnFixed"   onclick="setView('fixed')">Fixné výdaje</button>
+  </div>
+
+  <!-- ══ MONTHLY ══ -->
+  <div id="monthlyView">
+    <div class="month-tabs" id="monthTabs"></div>
+
+    <div class="balance-strip">
+      <div class="bal-block">
+        <div class="bal-label">Príjmy</div>
+        <div class="bal-val income" id="totalIncome">0,00 €</div>
+      </div>
+      <div class="divider"></div>
+      <div class="bal-block">
+        <div class="bal-label">Zostatok</div>
+        <div class="bal-val total" id="totalBalance">0,00 €</div>
+      </div>
+      <div class="divider"></div>
+      <div class="bal-block">
+        <div class="bal-label">Výdaje</div>
+        <div class="bal-val expense" id="totalExpense">0,00 €</div>
+      </div>
+    </div>
+
+    <!-- Month comparison -->
+    <div class="compare-bar" id="compareBar" style="display:none">
+      <span class="compare-icon" id="compareIcon">📊</span>
+      <div class="compare-text" id="compareText"></div>
+    </div>
+
+    <div class="input-section">
+      <div class="btn-row">
+        <button class="type-btn income-btn" onclick="selectType('income')">＋ Príjem</button>
+        <button class="type-btn expense-btn" onclick="selectType('expense')">－ Výdaj</button>
+      </div>
+      <div class="selected-type" id="selectedTypeLabel">← Vyber typ transakcie</div>
+      <div class="input-row">
+        <select class="desc-select" id="descInput" onchange="onDescChange()">
+          <option value="">— Kategória —</option>
+          <optgroup label="Domácnosť">
+            <option>Domácnosť</option>
+            <option>Nákup jedlo</option>
+            <option>Hypotéka</option>
+            <option>Telefón</option>
+          </optgroup>
+          <optgroup label="Doprava">
+            <option>Auto splátka</option>
+            <option>Tankovanie</option>
+            <option>Auto</option>
+          </optgroup>
+          <optgroup label="Práca / výroba">
+            <option>Odvody</option>
+            <option>Náradie a spotrebný materiál</option>
+            <option>Materiál na výrobu</option>
+            <option>Nájom sklad</option>
+          </optgroup>
+          <optgroup label="Financie">
+            <option>Sporenie</option>
+            <option>Rezerva</option>
+          </optgroup>
+          <optgroup label="Iné">
+            <option>Ostatné</option>
+          </optgroup>
+          <optgroup label="Vlastné" id="customCatGroup"></optgroup>
+          <option value="__add__">＋ Pridať kategóriu…</option>
+        </select>
+        <input class="amount-input" type="number" id="amountInput" placeholder="0,00" min="0" step="0.01" />
+        <button class="add-btn" onclick="addTransaction()">+</button>
+      </div>
+      <!-- Inline add-category row -->
+      <div class="add-cat-row" id="addCatRow">
+        <input class="cat-name-input" type="text" id="newCatName" placeholder="Názov kategórie…" />
+        <button class="cat-confirm-btn" onclick="confirmAddCategory()">Pridať</button>
+        <button class="cat-cancel-btn" onclick="cancelAddCategory()">Zrušiť</button>
+      </div>
+    </div>
+
+    <!-- Monthly category scroll list -->
+    <div class="cat-list-section" id="mCatSection">
+      <div class="cat-list-header" id="mCatHeader" onclick="toggleCatList('m')">
+        <div class="cat-list-header-left">
+          <span class="cat-list-title">Kategórie</span>
+          <span class="cat-list-active-label" id="mCatActiveLabel"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="cat-list-clear" id="mCatClearBtn" onclick="event.stopPropagation();clearCatFilter('m')" style="display:none">× Zrušiť</button>
+          <span class="cat-list-chevron">▼</span>
+        </div>
+      </div>
+      <div class="cat-scroll-list" id="mCatList"></div>
+    </div>
+
+    <!-- Active category summary -->
+    <div class="cat-detail-strip" id="catDetailStrip">
+      <div>
+        <div class="cat-detail-name" id="catDetailName"></div>
+        <div class="cat-detail-count" id="catDetailCount"></div>
+      </div>
+      <div class="cat-detail-sum" id="catDetailSum"></div>
+    </div>
+
+    <div class="list-header">
+      <span class="list-title" id="listTitle">Transakcie</span>
+    </div>
+    <div class="transactions" id="txList"></div>
+
+    <!-- Edit Transaction Modal -->
+    <div class="modal-overlay" id="editModal">
+      <div class="modal">
+        <div class="modal-title">Upraviť transakciu</div>
+        <div class="modal-field">
+          <label class="modal-label">Typ</label>
+          <div class="btn-row" style="margin-bottom:0">
+            <button class="type-btn income-btn" id="editIncomeBtn" onclick="setEditType('income')">＋ Príjem</button>
+            <button class="type-btn expense-btn" id="editExpenseBtn" onclick="setEditType('expense')">－ Výdaj</button>
+          </div>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Kategória</label>
+          <select class="modal-select" id="editDesc"></select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Suma (€)</label>
+          <input class="modal-input" type="number" id="editAmount" min="0" step="0.01" placeholder="0,00" />
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Poznámka (voliteľné)</label>
+          <textarea class="modal-note" id="editNote" placeholder="napr. Lidl, Shell Žilina…"></textarea>
+        </div>
+        <div class="modal-btns">
+          <button class="modal-cancel" onclick="closeEditModal()">Zrušiť</button>
+          <button class="modal-save" onclick="saveEdit()">Uložiť zmeny</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pie-section" id="mPieSection" onclick="openPieModal('monthly')">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+        <div class="pie-section-title" style="margin-bottom:0">Rozloženie podľa kategórií</div>
+        <span class="pie-expand-hint" style="margin-bottom:0">⤢ rozbaliť</span>
+      </div>
+      <div class="pie-tabs" onclick="event.stopPropagation()">
+        <button class="pie-tab active-expense" id="mTabExp" onclick="setPieMode('monthly','expense')">Výdaje</button>
+        <button class="pie-tab" id="mTabInc" onclick="setPieMode('monthly','income')">Príjmy</button>
+      </div>
+      <div id="mPieContent"></div>
+    </div>
+  </div>
+
+  <!-- ══ FIXED EXPENSES ══ -->
+  <div class="fixed-view" id="fixedView">
+    <div class="fixed-header-info">
+      <strong>Fixné výdaje</strong> sa automaticky pridajú do každého mesiaca na začiatku.<br>
+      Zapni iba tie, ktoré platíš každý mesiac, a nastav ich sumu.
+    </div>
+
+    <div class="fixed-total-strip">
+      <div class="fixed-total-label">Mesačné fixné výdaje celkom</div>
+      <div class="fixed-total-val" id="fixedTotalVal">0,00 €</div>
+    </div>
+
+    <div class="fixed-list" id="fixedList"></div>
+
+    <!-- Add new custom fixed item -->
+    <div class="fixed-add-row">
+      <input class="fixed-new-name" type="text" id="fixedNewName" placeholder="Názov novej položky…" />
+      <button class="fixed-add-new-btn" onclick="addCustomFixed()">+</button>
+    </div>
+
+    <button class="fixed-save-btn" onclick="saveFixed()">Uložiť fixné výdaje</button>
+  </div>
+
+  <!-- ══ YEARLY ══ -->
+  <div class="yearly-view" id="yearlyView">
+    <div class="year-totals">
+      <div class="yt-block">
+        <div class="yt-label">Príjmy celkom</div>
+        <div class="yt-val income" id="ytIncome">0,00 €</div>
+      </div>
+      <div class="yt-block">
+        <div class="yt-label">Zostatok</div>
+        <div class="yt-val total" id="ytBalance">0,00 €</div>
+      </div>
+      <div class="yt-block">
+        <div class="yt-label">Výdaje celkom</div>
+        <div class="yt-val expense" id="ytExpense">0,00 €</div>
+      </div>
+    </div>
+    <div class="yearly-table-wrap">
+    <table class="month-table">
+      <thead>
+        <tr>
+          <th>Mesiac</th><th>Príjmy</th><th>Výdaje</th><th>Zostatok</th><th class="bar-cell"></th>
+        </tr>
+      </thead>
+      <tbody id="yearlyBody"></tbody>
+    </table>
+    </div>
+    <!-- Yearly category scroll list -->
+    <div class="cat-list-section" style="margin-top:20px" id="yCatSection">
+      <div class="cat-list-header" id="yCatHeader" onclick="toggleCatList('y')">
+        <div class="cat-list-header-left">
+          <span class="cat-list-title">Kategórie — Rok <span id="yCatYear"></span></span>
+          <span class="cat-list-active-label" id="yCatActiveLabel"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="cat-list-clear" id="yCatClearBtn" onclick="event.stopPropagation();clearCatFilter('y')" style="display:none">× Zrušiť</button>
+          <span class="cat-list-chevron">▼</span>
+        </div>
+      </div>
+      <div class="cat-scroll-list" id="yCatList"></div>
+    </div>
+
+    <!-- Yearly filtered tx list -->
+    <div class="cat-detail-strip" id="yCatDetailStrip" style="margin-top:10px">
+      <div>
+        <div class="cat-detail-name" id="yCatDetailName"></div>
+        <div class="cat-detail-count" id="yCatDetailCount"></div>
+      </div>
+      <div class="cat-detail-sum" id="yCatDetailSum"></div>
+    </div>
+    <div class="transactions" id="yCatTxList" style="margin-top:6px;max-height:260px"></div>
+
+    <div class="pie-section" style="margin-top:20px" onclick="openPieModal('yearly')">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+        <div class="pie-section-title" style="margin-bottom:0">Rozloženie podľa kategórií</div>
+        <span class="pie-expand-hint" style="margin-bottom:0">⤢ rozbaliť</span>
+      </div>
+      <div class="pie-tabs" onclick="event.stopPropagation()">
+        <button class="pie-tab active-expense" id="yTabExp" onclick="setPieMode('yearly','expense')">Výdaje</button>
+        <button class="pie-tab" id="yTabInc" onclick="setPieMode('yearly','income')">Príjmy</button>
+      </div>
+      <div id="yPieContent"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Custom confirm sheet -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-sheet">
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-desc"  id="confirmDesc"></div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm()">Zrušiť</button>
+      <button class="confirm-ok"     id="confirmOkBtn">Vymazať</button>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen pie modal -->
+<div class="pie-modal-overlay" id="pieModal">
+  <div class="pie-modal-inner">
+    <div class="pie-modal-topbar">
+      <div class="pie-modal-title" id="pieModalTitle">Rozloženie výdajov</div>
+      <button class="pie-modal-close" onclick="closePieModal()">✕</button>
+    </div>
+    <div class="pie-modal-tabs">
+      <button class="pie-modal-tab active-expense" id="pmTabExp" onclick="setPieModalMode('expense')">Výdaje</button>
+      <button class="pie-modal-tab" id="pmTabInc" onclick="setPieModalMode('income')">Príjmy</button>
+    </div>
+    <div class="pie-modal-canvas-wrap">
+      <canvas id="pieModalCanvas" width="260" height="260"></canvas>
+      <div class="pie-modal-center">
+        <div class="pie-modal-center-val" id="pieModalTotal"></div>
+        <div class="pie-modal-center-lbl" id="pieModalLbl"></div>
+      </div>
+    </div>
+    <div class="pie-modal-legend" id="pieModalLegend"></div>
+  </div>
+</div>
+
+<script>
+  const MONTHS_SK   = ['Jan','Feb','Mar','Apr','Máj','Jún','Júl','Aug','Sep','Okt','Nov','Dec'];
+  const MONTHS_FULL = ['Január','Február','Marec','Apríl','Máj','Jún','Júl','August','September','Október','November','December'];
+  const PALETTE = ['#ff4d6d','#00e5a0','#f5e642','#4d9fff','#ff9f4d','#c44dff','#4dffc4','#ff4dbc','#4dffff','#ffcc4d','#8aff4d','#ff6b4d'];
+
+  const CAT_GROUPS = [
+    { label: 'Domácnosť',      cats: ['Domácnosť','Nákup jedlo','Hypotéka','Telefón'] },
+    { label: 'Doprava',        cats: ['Auto splátka','Tankovanie','Auto'] },
+    { label: 'Práca / výroba', cats: ['Odvody','Náradie a spotrebný materiál','Materiál na výrobu','Nájom sklad'] },
+    { label: 'Financie',       cats: ['Sporenie','Rezerva'] },
+  ];
+
+  function getGroupForCat(cat) {
+    for (const g of CAT_GROUPS) {
+      if (g.cats.includes(cat)) return g.label;
+    }
+    return null;
+  }
+
+  function getCatsForGroup(groupLabel) {
+    const g = CAT_GROUPS.find(g => g.label === groupLabel);
+    return g ? g.cats : [];
+  }
+
+  // Fixed expense definitions
+  const FIXED_DEFS = [
+    { key: 'hypoteka',    label: 'Hypotéka' },
+    { key: 'auto',        label: 'Auto splátka' },
+    { key: 'telefon',     label: 'Telefón' },
+    { key: 'odvody',      label: 'Odvody' },
+    { key: 'najom_sklad', label: 'Nájom sklad' },
+    { key: 'sporenie',    label: 'Sporenie' },
+    { key: 'rezerva',     label: 'Rezerva' },
+  ];
+
+  let transactions = JSON.parse(localStorage.getItem('rozpocet_v2') || '[]');
+  // fixedConfig: { key: { amount: number, enabled: bool } }
+  let fixedConfig  = JSON.parse(localStorage.getItem('rozpocet_fixed') || '{}');
+  // Track which months already had fixed expenses injected
+  let fixedApplied = JSON.parse(localStorage.getItem('rozpocet_fixed_applied') || '[]');
+
+  let selectedType = 'expense';
+  let currentView  = 'monthly';
+  let mPieMode     = 'expense';
+  let yPieMode     = 'expense';
+
+  const now = new Date();
+  let currentYear  = now.getFullYear();
+  let currentMonth = now.getMonth();
+
+  function monthKey(y, m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
+  function monthTransactions(y, m) {
+    const k = (y !== undefined) ? monthKey(y, m) : monthKey(currentYear, currentMonth);
+    return transactions.filter(t => t.month === k);
+  }
+  function yearTransactions(y) { return transactions.filter(t => t.month.startsWith(y + '-')); }
+  function hasData(y, m) { return transactions.some(t => t.month === monthKey(y, m)); }
+
+  // ── AUTO-INJECT FIXED EXPENSES ──
+  function applyFixedToMonth(y, m) {
+    const mk = monthKey(y, m);
+    if (fixedApplied.includes(mk)) return; // already done
+
+    const allDefs = allFixedDefs();
+    const enabled = allDefs.filter(d => fixedConfig[d.key]?.enabled && fixedConfig[d.key]?.amount > 0);
+    if (enabled.length === 0) return;
+
+    const dateStr = `1. ${MONTHS_SK[m]}. ${y}`;
+    enabled.forEach(d => {
+      transactions.push({
+        id: Date.now() + Math.random(),
+        type: 'expense',
+        amount: fixedConfig[d.key].amount,
+        desc: d.label,
+        month: mk,
+        date: dateStr,
+        isFixed: true
+      });
+    });
+
+    fixedApplied.push(mk);
+    saveAll();
+  }
+
+  // Force re-apply fixed to a month (removes old fixed txs and re-injects)
+  function reapplyFixedToMonth(y, m) {
+    const mk = monthKey(y, m);
+    // Remove existing fixed transactions for this month
+    transactions = transactions.filter(t => !(t.month === mk && t.isFixed));
+    // Remove from applied list so it gets re-injected
+    fixedApplied = fixedApplied.filter(x => x !== mk);
+    // Re-apply
+    applyFixedToMonth(y, m);
+  }
+
+  // Apply fixed to current month when app loads / month changes
+  function ensureFixedApplied() {
+    applyFixedToMonth(currentYear, currentMonth);
+  }
+
+  function saveAll() {
+    localStorage.setItem('rozpocet_v2', JSON.stringify(transactions));
+    localStorage.setItem('rozpocet_fixed', JSON.stringify(fixedConfig));
+    localStorage.setItem('rozpocet_fixed_applied', JSON.stringify(fixedApplied));
+  }
+
+  // ── VIEWS ──
+  function setView(v) {
+    currentView = v;
+    document.getElementById('monthlyView').style.display  = v === 'monthly' ? '' : 'none';
+    document.getElementById('yearlyView').classList.toggle('visible', v === 'yearly');
+    document.getElementById('fixedView').classList.toggle('visible',  v === 'fixed');
+    document.getElementById('btnMonthly').className = 'view-btn' + (v === 'monthly' ? ' active' : '');
+    document.getElementById('btnYearly').className  = 'view-btn' + (v === 'yearly'  ? ' active' : '');
+    document.getElementById('btnFixed').className   = 'view-btn' + (v === 'fixed'   ? ' active-fixed' : '');
+    // Year nav only relevant for monthly/yearly
+    document.querySelector('.year-nav').style.visibility = v === 'fixed' ? 'hidden' : 'visible';
+    render();
+  }
+
+  function setPieMode(scope, mode) {
+    if (scope === 'monthly') {
+      mPieMode = mode;
+      document.getElementById('mTabExp').className = 'pie-tab' + (mode === 'expense' ? ' active-expense' : '');
+      document.getElementById('mTabInc').className = 'pie-tab' + (mode === 'income'  ? ' active-income'  : '');
+      renderMonthlyPie();
+    } else {
+      yPieMode = mode;
+      document.getElementById('yTabExp').className = 'pie-tab' + (mode === 'expense' ? ' active-expense' : '');
+      document.getElementById('yTabInc').className = 'pie-tab' + (mode === 'income'  ? ' active-income'  : '');
+      renderYearlyPie();
+    }
+  }
+
+  // ── CUSTOM CATEGORIES ──
+  let customCategories = JSON.parse(localStorage.getItem('rozpocet_cats') || '[]');
+
+  function rebuildCustomCatOptions() {
+    const grp = document.getElementById('customCatGroup');
+    if (!grp) return;
+    grp.innerHTML = customCategories.map(c =>
+      `<option value="${c}" data-custom="1">${c}</option>`
+    ).join('');
+  }
+
+  function onDescChange() {
+    const sel = document.getElementById('descInput');
+    if (sel.value === '__add__') {
+      sel.value = '';
+      document.getElementById('addCatRow').classList.add('visible');
+      document.getElementById('newCatName').focus();
+    }
+  }
+
+  function confirmAddCategory() {
+    const inp = document.getElementById('newCatName');
+    const name = inp.value.trim();
+    if (!name) { inp.focus(); return; }
+    if (!customCategories.includes(name)) {
+      customCategories.push(name);
+      localStorage.setItem('rozpocet_cats', JSON.stringify(customCategories));
+    }
+    rebuildCustomCatOptions();
+    // Select the newly added category
+    const sel = document.getElementById('descInput');
+    sel.value = name;
+    inp.value = '';
+    document.getElementById('addCatRow').classList.remove('visible');
+  }
+
+  function cancelAddCategory() {
+    document.getElementById('newCatName').value = '';
+    document.getElementById('addCatRow').classList.remove('visible');
+  }
+
+  function selectType(type) {
+    selectedType = type;
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.' + type + '-btn').classList.add('active');
+    const label = document.getElementById('selectedTypeLabel');
+    label.textContent = type === 'income' ? '✓ Príjem vybraný' : '✓ Výdaj vybraný';
+    label.style.color = type === 'income' ? 'var(--income)' : 'var(--expense)';
+    document.getElementById('amountInput').focus();
+  }
+
+  function fmt(n, short) {
+    if (short && Math.abs(n) >= 1000)
+      return (n/1000).toLocaleString('sk-SK',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' k€';
+    return n.toLocaleString('sk-SK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  function addTransaction() {
+    const amount = parseFloat(document.getElementById('amountInput').value);
+    if (!selectedType) { alert('Vyber typ: Príjem alebo Výdaj'); return; }
+    if (!amount || amount <= 0) { alert('Zadaj platnú sumu'); return; }
+    const descVal = document.getElementById('descInput').value;
+    const desc = (descVal && descVal !== '') ? descVal : (selectedType === 'income' ? 'Príjem' : 'Výdaj');
+    transactions.unshift({ id: Date.now(), type: selectedType, amount, desc, month: monthKey(currentYear, currentMonth), date: new Date().toLocaleDateString('sk-SK') });
+    saveAll(); render();
+    document.getElementById('amountInput').value = '';
+    document.getElementById('descInput').value = '';
+  }
+
+  function deleteTransaction(id) {
+    transactions = transactions.filter(t => t.id !== id);
+    saveAll(); render();
+  }
+
+  function clearMonth() {
+    const txs = monthTransactions();
+    if (txs.length === 0) {
+      showToast('Mesiac je prázdny');
+      return;
+    }
+    showConfirm(
+      `Vymazať ${MONTHS_FULL[currentMonth]} ${currentYear}?`,
+      `${txs.length} transakcií bude odstránených.`,
+      () => {
+        const k = monthKey(currentYear, currentMonth);
+        transactions = transactions.filter(t => t.month !== k);
+        fixedApplied = fixedApplied.filter(x => x !== k);
+        saveAll(); render();
+        showToast('Mesiac vymazaný');
+      }
+    );
+  }
+
+  function changeYear(dir) { currentYear += dir; render(); }
+  function selectMonth(m)  { currentMonth = m; ensureFixedApplied(); setView('monthly'); }
+
+  // ── FIXED EXPENSES PANEL ──
+  // All defs = built-in + custom
+  function allFixedDefs() {
+    const custom = JSON.parse(localStorage.getItem('rozpocet_fixed_custom') || '[]');
+    return [...FIXED_DEFS, ...custom];
+  }
+
+  function saveCustomDefs(defs) {
+    localStorage.setItem('rozpocet_fixed_custom', JSON.stringify(defs));
+  }
+
+  function addCustomFixed() {
+    const inp = document.getElementById('fixedNewName');
+    const name = inp.value.trim();
+    if (!name) { inp.focus(); return; }
+    const key = 'custom_' + Date.now();
+    const custom = JSON.parse(localStorage.getItem('rozpocet_fixed_custom') || '[]');
+    custom.push({ key, label: name, isCustom: true });
+    saveCustomDefs(custom);
+    inp.value = '';
+    renderFixed();
+  }
+
+  function deleteCustomFixed(key) {
+    // Save current amounts/states first
+    _collectFixedInputs();
+    const custom = JSON.parse(localStorage.getItem('rozpocet_fixed_custom') || '[]');
+    saveCustomDefs(custom.filter(d => d.key !== key));
+    delete fixedConfig[key];
+    saveAll();
+    renderFixed();
+  }
+
+  function _collectFixedInputs() {
+    allFixedDefs().forEach(d => {
+      const inp = document.getElementById('fi_' + d.key);
+      const amt = parseFloat(inp?.value) || 0;
+      if (!fixedConfig[d.key]) fixedConfig[d.key] = { enabled: false };
+      fixedConfig[d.key].amount = amt;
+    });
+  }
+
+  function renderFixed() {
+    let total = 0;
+    const defs = allFixedDefs();
+    document.getElementById('fixedList').innerHTML = defs.map(d => {
+      const cfg = fixedConfig[d.key] || { amount: 0, enabled: false };
+      if (cfg.enabled && cfg.amount > 0) total += cfg.amount;
+      const delBtn = d.isCustom
+        ? `<button class="fixed-item-del" onclick="deleteCustomFixed('${d.key}')" title="Odstrániť">✕</button>`
+        : '';
+      return `
+        <div class="fixed-item">
+          <span class="fixed-item-name">${d.label}</span>
+          <input class="fixed-item-input" type="number" id="fi_${d.key}" value="${cfg.amount || ''}" placeholder="0,00" min="0" step="0.01" oninput="updateFixedTotal()" />
+          <span class="fixed-currency">€</span>
+          <div class="fixed-toggle ${cfg.enabled ? 'on' : ''}" id="ft_${d.key}" onclick="toggleFixed('${d.key}')"></div>
+          ${delBtn}
+        </div>`;
+    }).join('');
+    document.getElementById('fixedTotalVal').textContent = fmt(total);
+  }
+
+  function toggleFixed(key) {
+    const btn = document.getElementById('ft_' + key);
+    const isOn = btn.classList.toggle('on');
+    if (!fixedConfig[key]) fixedConfig[key] = { amount: 0, enabled: false };
+    fixedConfig[key].enabled = isOn;
+    updateFixedTotal();
+  }
+
+  function updateFixedTotal() {
+    let total = 0;
+    allFixedDefs().forEach(d => {
+      const inp = document.getElementById('fi_' + d.key);
+      const cfg = fixedConfig[d.key] || { enabled: false };
+      const amt = parseFloat(inp?.value) || 0;
+      if (cfg.enabled && amt > 0) total += amt;
+    });
+    document.getElementById('fixedTotalVal').textContent = fmt(total);
+  }
+
+  function saveFixed() {
+    _collectFixedInputs();
+    saveAll();
+    // Re-apply fixed to current month and future unprocessed months
+    reapplyFixedToMonth(currentYear, currentMonth);
+    render();
+    // Show brief confirmation without blocking alert
+    const btn = document.querySelector('.fixed-save-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Uložené a aplikované!';
+    btn.style.background = 'var(--income)';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+  }
+
+  // ── PIE ──
+  function groupByCategory(txs, type) {
+    const map = {};
+    txs.filter(t => t.type === type).forEach(t => { map[t.desc] = (map[t.desc] || 0) + t.amount; });
+    return Object.entries(map).map(([name, total]) => ({ name, total })).sort((a,b) => b.total - a.total);
+  }
+
+  function draw3dPie(ctx, data, total, cx, cy, r, ir, depth, bgColor) {
+    if (total === 0 || data.length === 0) {
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+      ctx.strokeStyle = '#2a2a2a'; ctx.lineWidth = (r - ir); ctx.stroke(); return;
+    }
+
+    // ── SHADOW under whole disc ──
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.55)';
+    ctx.shadowBlur  = 18;
+    ctx.shadowOffsetY = depth * 0.6;
+    ctx.beginPath(); ctx.ellipse(cx, cy + depth*0.5, r*0.9, r*0.25, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fill();
+    ctx.restore();
+
+    // ── SIDE walls (bottom disc offset by depth) ──
+    let startAngle = -Math.PI / 2;
+    data.forEach((item, i) => {
+      const slice = (item.total / total) * Math.PI * 2;
+      const col   = PALETTE[i % PALETTE.length];
+      // Only draw side for bottom half slices (visible depth)
+      const midAngle = startAngle + slice / 2;
+      // Draw side wall as filled arc between top and bottom
+      ctx.beginPath();
+      ctx.arc(cx, cy + depth, r, startAngle, startAngle + slice);
+      ctx.arc(cx, cy, r, startAngle + slice, startAngle, true);
+      ctx.closePath();
+      // Darken color for side
+      ctx.fillStyle = darkenColor(col, 0.55);
+      ctx.fill();
+      startAngle += slice;
+    });
+
+    // ── Inner side wall for donut hole ──
+    ctx.beginPath();
+    ctx.arc(cx, cy, ir, 0, Math.PI*2);
+    ctx.arc(cx, cy + depth, ir, Math.PI*2, 0, true);
+    ctx.fillStyle = bgColor; ctx.fill();
+
+    // ── TOP face slices ──
+    startAngle = -Math.PI / 2;
+    data.forEach((item, i) => {
+      const slice = (item.total / total) * Math.PI * 2;
+      const col   = PALETTE[i % PALETTE.length];
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, startAngle + slice);
+      ctx.closePath();
+
+      // Radial gradient for sheen effect
+      const midAngle = startAngle + slice / 2;
+      const gx = cx + Math.cos(midAngle) * r * 0.45;
+      const gy = cy + Math.sin(midAngle) * r * 0.45;
+      const grad = ctx.createRadialGradient(gx, gy, 0, gx, gy, r * 0.9);
+      grad.addColorStop(0, lightenColor(col, 0.22));
+      grad.addColorStop(1, col);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Thin separator line
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, startAngle + slice);
+      ctx.closePath();
+      ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      startAngle += slice;
+    });
+
+    // ── Donut hole on top face ──
+    ctx.beginPath(); ctx.arc(cx, cy, ir, 0, Math.PI*2);
+    ctx.fillStyle = bgColor; ctx.fill();
+
+    // ── Highlight arc on top edge ──
+    const hlGrad = ctx.createLinearGradient(cx - r, cy - r, cx + r*0.3, cy + r*0.3);
+    hlGrad.addColorStop(0, 'rgba(255,255,255,0.10)');
+    hlGrad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+    ctx.arc(cx, cy, ir, Math.PI*2, 0, true);
+    ctx.fillStyle = hlGrad; ctx.fill();
+  }
+
+  function lightenColor(hex, amt) {
+    const n = parseInt(hex.slice(1), 16);
+    const r = Math.min(255, (n >> 16) + Math.round(255 * amt));
+    const g = Math.min(255, ((n >> 8) & 0xff) + Math.round(255 * amt));
+    const b = Math.min(255, (n & 0xff) + Math.round(255 * amt));
+    return `rgb(${r},${g},${b})`;
+  }
+
+  function darkenColor(hex, factor) {
+    const n = parseInt(hex.slice(1), 16);
+    const r = Math.round((n >> 16) * factor);
+    const g = Math.round(((n >> 8) & 0xff) * factor);
+    const b = Math.round((n & 0xff) * factor);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  function drawPie(canvasId, data, total) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx  = canvas.getContext('2d');
+    const size = canvas.width;
+    const cx = size/2, cy = size/2 - 4, r = size/2 - 10, ir = r * 0.52;
+    ctx.clearRect(0, 0, size, size);
+    draw3dPie(ctx, data, total, cx, cy, r, ir, 10, '#1a1a1a');
+  }
+
+  function renderPie(contentId, canvasId, txs, mode) {
+    const container = document.getElementById(contentId);
+    const data  = groupByCategory(txs, mode);
+    const total = data.reduce((s,d) => s + d.total, 0);
+    const color = mode === 'expense' ? 'var(--expense)' : 'var(--income)';
+    if (data.length === 0) { container.innerHTML = `<div class="pie-empty">Žiadne ${mode === 'expense' ? 'výdaje' : 'príjmy'} na zobrazenie</div>`; return; }
+    container.innerHTML = `
+      <div class="pie-layout">
+        <div class="pie-wrap">
+          <canvas id="${canvasId}" width="168" height="168"></canvas>
+          <div class="pie-center">
+            <div class="pie-center-val" style="color:${color}">${fmt(total, true)}</div>
+            <div class="pie-center-lbl">${mode === 'expense' ? 'výdaje' : 'príjmy'}</div>
+          </div>
+        </div>
+        <div class="pie-legend" id="${canvasId}Legend"></div>
+      </div>`;
+    drawPie(canvasId, data, total);
+    document.getElementById(canvasId + 'Legend').innerHTML = data.map((item, i) => {
+      const pct = Math.round((item.total / total) * 100);
+      return `<div class="legend-item"><div class="legend-dot" style="background:${PALETTE[i % PALETTE.length]}"></div><span class="legend-name">${item.name}</span><span class="legend-pct">${pct}%</span><span class="legend-amt">${fmt(item.total, true)}</span></div>`;
+    }).join('');
+  }
+
+  function renderMonthlyPie() { renderPie('mPieContent', 'mPieCanvas', monthTransactions(), mPieMode); }
+  function renderYearlyPie()  { renderPie('yPieContent', 'yPieCanvas', yearTransactions(currentYear), yPieMode); }
+
+  // ── MONTHLY ──
+  function renderMonthly() {
+    document.getElementById('yearLabel').textContent = currentYear;
+    document.getElementById('monthTabs').innerHTML = MONTHS_SK.map((name, i) => {
+      const active = i === currentMonth ? 'active' : '';
+      const hd = hasData(currentYear, i) ? 'has-data' : '';
+      return `<button class="month-tab ${active} ${hd}" onclick="selectMonth(${i})">${name}<span class="dot"></span></button>`;
+    }).join('');
+
+    const txs = monthTransactions();
+    const income  = txs.filter(t => t.type === 'income').reduce((s,t) => s + t.amount, 0);
+    const expense = txs.filter(t => t.type === 'expense').reduce((s,t) => s + t.amount, 0);
+
+    updateBalanceAnimated(income, expense);
+    document.getElementById('listTitle').textContent = MONTHS_FULL[currentMonth] + ' ' + currentYear;
+    renderComparison(income, expense);
+
+    renderCatScrollList('m', monthTransactions());
+    renderTxList();
+    renderMonthlyPie();
+  }
+
+  // ── YEARLY ──
+  function renderYearly() {
+    document.getElementById('yearLabel').textContent = currentYear;
+    let yearIncome = 0, yearExpense = 0, maxExpense = 0;
+    const rows = [];
+    for (let m = 0; m < 12; m++) {
+      const txs = monthTransactions(currentYear, m);
+      const income  = txs.filter(t => t.type === 'income').reduce((s,t) => s + t.amount, 0);
+      const expense = txs.filter(t => t.type === 'expense').reduce((s,t) => s + t.amount, 0);
+      yearIncome += income; yearExpense += expense;
+      if (expense > maxExpense) maxExpense = expense;
+      rows.push({ m, income, expense, balance: income - expense, hasAny: txs.length > 0 });
+    }
+    document.getElementById('ytIncome').textContent  = fmt(yearIncome);
+    document.getElementById('ytExpense').textContent = fmt(yearExpense);
+    document.getElementById('ytBalance').textContent = fmt(yearIncome - yearExpense);
+
+    const isCurrent = currentYear === now.getFullYear();
+    document.getElementById('yearlyBody').innerHTML = rows.map(r => {
+      const isCur = isCurrent && r.m === now.getMonth();
+      const balClass = r.balance > 0 ? 'pos' : r.balance < 0 ? 'neg' : 'zero';
+      const barPct = maxExpense > 0 ? Math.round((r.expense / maxExpense) * 100) : 0;
+      if (!r.hasAny) return `<tr class="empty-row${isCur ? ' current-month' : ''}" onclick="selectMonth(${r.m})"><td>${MONTHS_FULL[r.m]}${isCur ? ' ●' : ''}</td><td class="val-income" style="color:var(--border)">—</td><td class="val-expense" style="color:var(--border)">—</td><td class="val-balance zero">—</td><td class="bar-cell"><div class="bar-wrap"><div class="bar-fill" style="width:0%"></div></div></td></tr>`;
+      return `<tr${isCur ? ' class="current-month"' : ''} onclick="selectMonth(${r.m})"><td>${MONTHS_FULL[r.m]}${isCur ? ' ●' : ''}</td><td class="val-income">+${fmt(r.income, true)}</td><td class="val-expense">−${fmt(r.expense, true)}</td><td class="val-balance ${balClass}">${r.balance >= 0 ? '+' : ''}${fmt(r.balance, true)}</td><td class="bar-cell"><div class="bar-wrap"><div class="bar-fill" style="width:${barPct}%"></div></div></td></tr>`;
+    }).join('');
+    // Yearly category scroll list
+    const yAllTxs = yearTransactions(currentYear);
+    const yCatYearEl = document.getElementById('yCatYear');
+    if (yCatYearEl) yCatYearEl.textContent = currentYear;
+    renderCatScrollList('y', yAllTxs);
+
+    // Yearly filtered tx list
+    const yCatStrip  = document.getElementById('yCatDetailStrip');
+    const yCatTxList = document.getElementById('yCatTxList');
+    if (yActiveCat) {
+      const filteredY = filterByActiveCat(yAllTxs, yActiveCat);
+      const totalY    = filteredY.reduce((s,t) => s + t.amount, 0);
+      const yLabel = yActiveCat.startsWith('__group__') ? yActiveCat.replace('__group__','') : yActiveCat;
+      document.getElementById('yCatDetailName').textContent  = yLabel;
+      document.getElementById('yCatDetailCount').textContent = `${filteredY.length} položiek · Rok ${currentYear}`;
+      document.getElementById('yCatDetailSum').textContent   = '−' + fmt(totalY);
+      yCatStrip.classList.add('visible');
+      yCatTxList.style.display = 'flex';
+      yCatTxList.innerHTML = filteredY.map(t => txItemHtml(t)).join('');
+    } else {
+      yCatStrip.classList.remove('visible');
+      yCatTxList.style.display = 'none';
+      yCatTxList.innerHTML = '';
+    }
+
+    renderYearlyPie();
+  }
+
+  // ── EDIT MODAL ──
+  let editingId = null;
+  let editType  = 'expense';
+
+  function buildModalSelect(selectedDesc) {
+    const allCats = [
+      'Domácnosť','Nákup jedlo','Hypotéka','Telefón',
+      'Auto splátka','Tankovanie','Auto','Odvody','Náradie a spotrebný materiál',
+      'Materiál na výrobu','Nájom sklad','Sporenie','Rezerva','Ostatné',
+      ...customCategories
+    ];
+    const sel = document.getElementById('editDesc');
+    sel.innerHTML = allCats.map(c =>
+      `<option value="${c}" ${c === selectedDesc ? 'selected' : ''}>${c}</option>`
+    ).join('');
+  }
+
+  function setEditType(type) {
+    editType = type;
+    document.getElementById('editIncomeBtn').classList.toggle('active', type === 'income');
+    document.getElementById('editExpenseBtn').classList.toggle('active', type === 'expense');
+  }
+
+  function openEditModal(id) {
+    const t = transactions.find(x => x.id === id);
+    if (!t) return;
+    editingId = id;
+    editType  = t.type;
+    buildModalSelect(t.desc);
+    document.getElementById('editAmount').value = t.amount;
+    document.getElementById('editNote').value   = t.note || '';
+    document.getElementById('editIncomeBtn').classList.toggle('active', t.type === 'income');
+    document.getElementById('editExpenseBtn').classList.toggle('active', t.type === 'expense');
+    document.getElementById('editModal').classList.add('open');
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').classList.remove('open');
+    editingId = null;
+  }
+
+  function saveEdit() {
+    const t = transactions.find(x => x.id === editingId);
+    if (!t) return;
+    const amt = parseFloat(document.getElementById('editAmount').value);
+    if (!amt || amt <= 0) { document.getElementById('editAmount').focus(); return; }
+    t.type   = editType;
+    t.desc   = document.getElementById('editDesc').value;
+    t.amount = amt;
+    t.note   = document.getElementById('editNote').value.trim();
+    saveAll(); closeEditModal(); render();
+  }
+
+  // Close modal on overlay click
+  document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
+
+  // ── BACKUP & RESTORE ──
+  function exportData() {
+    const payload = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      transactions,
+      fixedConfig,
+      fixedApplied,
+      customCategories,
+      customFixedDefs: JSON.parse(localStorage.getItem('rozpocet_fixed_custom') || '[]')
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `rozpocet_zaloha_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data.transactions) throw new Error('Neplatný súbor');
+        if (!confirm('Importovať zálohu? Aktuálne dáta budú prepísané.')) return;
+        transactions      = data.transactions      || [];
+        fixedConfig       = data.fixedConfig        || {};
+        fixedApplied      = data.fixedApplied       || [];
+        customCategories  = data.customCategories   || [];
+        localStorage.setItem('rozpocet_cats', JSON.stringify(customCategories));
+        if (data.customFixedDefs) localStorage.setItem('rozpocet_fixed_custom', JSON.stringify(data.customFixedDefs));
+        saveAll();
+        rebuildCustomCatOptions();
+        render();
+        alert('Záloha úspešne obnovená!');
+      } catch(err) {
+        alert('Chyba pri importe: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
+  // ── CATEGORY SCROLL LISTS ──
+  let mActiveCat = null;  // monthly active filter
+  let yActiveCat = null;  // yearly active filter
+  let mCatOpen   = false;
+  let yCatOpen   = false;
+
+  function toggleCatList(scope) {
+    if (scope === 'm') {
+      mCatOpen = !mCatOpen;
+      document.getElementById('mCatList').classList.toggle('open', mCatOpen);
+      document.getElementById('mCatHeader').classList.toggle('open', mCatOpen);
+    } else {
+      yCatOpen = !yCatOpen;
+      document.getElementById('yCatList').classList.toggle('open', yCatOpen);
+      document.getElementById('yCatHeader').classList.toggle('open', yCatOpen);
+    }
+  }
+
+  function clearCatFilter(scope) {
+    if (scope === 'm') { mActiveCat = null; }
+    else               { yActiveCat = null; }
+    render();
+  }
+
+  function selectCat(scope, cat) {
+    if (scope === 'm') { mActiveCat = mActiveCat === cat ? null : cat; }
+    else               { yActiveCat = yActiveCat === cat ? null : cat; }
+    render();
+  }
+
+  function filterByActiveCat(txs, activeCat) {
+    if (!activeCat) return txs;
+    if (activeCat.startsWith('__group__')) {
+      const groupLabel = activeCat.replace('__group__', '');
+      const cats = getCatsForGroup(groupLabel);
+      return txs.filter(t => cats.includes(t.desc));
+    }
+    return txs.filter(t => t.desc === activeCat);
+  }
+
+  function txItemHtml(t) {
+    const descText = t.desc || (t.type === 'income' ? 'Príjem' : 'Výdaj');
+    const dateShort = t.date || '';
+    return `<div class="tx-item ${t.isFixed ? 'fixed-tx' : t.type}">
+      <div style="flex:1;min-width:0;overflow:hidden;margin-right:8px">
+        <div class="tx-desc">${descText}</div>
+        <div class="tx-meta">${dateShort}${t.isFixed ? ' <span class="fixed-badge">● fixný</span>' : ''}</div>
+        ${t.note ? `<div class="tx-note">📝 ${t.note}</div>` : ''}
+      </div>
+      <div class="tx-right">
+        <div class="tx-amount">${t.type === 'income' ? '+' : '−'}${fmt(t.amount)}</div>
+        <button class="tx-repeat" onclick="repeatTransaction(${t.id})" title="Zopakovať">↺</button>
+        <button class="tx-edit"   onclick="openEditModal(${t.id})"     title="Upraviť">✎</button>
+        <button class="tx-delete" onclick="deleteTransaction(${t.id})"               >✕</button>
+      </div>
+    </div>`;
+  }
+
+  function renderCatScrollList(scope, allTxs) {
+    const listEl    = document.getElementById(scope + 'CatList');
+    const activeCat = scope === 'm' ? mActiveCat : yActiveCat;
+
+    // Build per-category stats
+    const catMap = {};
+    allTxs.forEach(t => {
+      if (!catMap[t.desc]) catMap[t.desc] = { count: 0, total: 0 };
+      catMap[t.desc].count++;
+      catMap[t.desc].total += t.amount;
+    });
+    if (Object.keys(catMap).length === 0) {
+      listEl.innerHTML = '<div style="padding:12px 16px;font-size: 16px;color:var(--muted)">Žiadne transakcie</div>';
+    } else {
+      // Build group stats
+      const groupMap = {};
+      CAT_GROUPS.forEach(g => {
+        const total = g.cats.reduce((s,c) => s + (catMap[c]?.total || 0), 0);
+        const count = g.cats.reduce((s,c) => s + (catMap[c]?.count || 0), 0);
+        if (count > 0) groupMap[g.label] = { total, count };
+      });
+
+      // Remaining cats not in any group
+      const ungrouped = Object.keys(catMap).filter(c => !getGroupForCat(c));
+
+      let html = '';
+      let colorIdx = 0;
+
+      // Render groups
+      CAT_GROUPS.forEach(g => {
+        if (!groupMap[g.label]) return;
+        const gs = groupMap[g.label];
+        const gActive = activeCat === '__group__' + g.label;
+        const safeGroup = g.label.replace(/'/g,"\'");
+        const gColor = PALETTE[colorIdx % PALETTE.length];
+        colorIdx++;
+
+        html += `<div class="cat-row cat-group-row ${gActive ? 'active' : ''}" onclick="selectCat('${scope}','__group__${safeGroup}')">
+          <div class="cat-row-dot" style="background:${gColor};border-radius:3px"></div>
+          <span class="cat-row-name" style="font-weight:600">${g.label}</span>
+          <span class="cat-row-count">${gs.count}×</span>
+          <span class="cat-row-sum" style="color:${gActive ? 'var(--accent)' : gColor}">−${fmt(gs.total, true)}</span>
+        </div>`;
+
+        // Sub-rows for each cat in group that has data
+        g.cats.forEach(cat => {
+          if (!catMap[cat]) return;
+          const stat = catMap[cat];
+          const cActive = activeCat === cat;
+          const safeCat = cat.replace(/'/g,"\'");
+          html += `<div class="cat-row cat-sub-row ${cActive ? 'active' : ''}" onclick="selectCat('${scope}','${safeCat}')">
+            <div style="width:8px;flex-shrink:0"></div>
+            <div class="cat-row-dot" style="background:${gColor};opacity:0.45"></div>
+            <span class="cat-row-name" style="font-size: 16px">${cat}</span>
+            <span class="cat-row-count">${stat.count}×</span>
+            <span class="cat-row-sum" style="color:${cActive ? 'var(--accent)' : 'var(--muted)'}">−${fmt(stat.total, true)}</span>
+          </div>`;
+        });
+      });
+
+      // Ungrouped / custom cats
+      if (ungrouped.length > 0) {
+        html += `<div style="padding:6px 16px 2px;font-size: 16px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">Ostatné</div>`;
+        ungrouped.forEach(cat => {
+          const stat   = catMap[cat];
+          const cActive = activeCat === cat;
+          const safeCat = cat.replace(/'/g,"\'");
+          const color  = PALETTE[colorIdx % PALETTE.length];
+          colorIdx++;
+          html += `<div class="cat-row ${cActive ? 'active' : ''}" onclick="selectCat('${scope}','${safeCat}')">
+            <div class="cat-row-dot" style="background:${color}"></div>
+            <span class="cat-row-name">${cat}</span>
+            <span class="cat-row-count">${stat.count}×</span>
+            <span class="cat-row-sum" style="color:${cActive ? 'var(--accent)' : color}">−${fmt(stat.total, true)}</span>
+          </div>`;
+        });
+      }
+
+      listEl.innerHTML = html;
+    }
+
+    // Sync open state
+    listEl.classList.toggle('open', scope === 'm' ? mCatOpen : yCatOpen);
+    document.getElementById(scope + 'CatHeader').classList.toggle('open', scope === 'm' ? mCatOpen : yCatOpen);
+
+    // Clear btn + active label
+    const clearBtn = document.getElementById(scope + 'CatClearBtn');
+    const label    = document.getElementById(scope + 'CatActiveLabel');
+    const displayLabel = activeCat
+      ? (activeCat.startsWith('__group__') ? activeCat.replace('__group__','') : activeCat)
+      : '';
+    clearBtn.style.display = activeCat ? '' : 'none';
+    label.textContent      = displayLabel;
+  }
+
+  function renderTxList() {
+    const allMonth = monthTransactions();
+    const txs = filterByActiveCat(allMonth, mActiveCat);
+    const list = document.getElementById('txList');
+    const label = mActiveCat
+      ? (mActiveCat.startsWith('__group__') ? mActiveCat.replace('__group__','') : mActiveCat)
+      : '';
+    if (txs.length === 0) {
+      list.innerHTML = `<div class="empty">${mActiveCat ? 'Žiadne transakcie pre "' + label + '"' : 'Žiadne transakcie za tento mesiac'}</div>`;
+    } else {
+      list.innerHTML = txs.map(t => txItemHtml(t)).join('');
+    }
+    // Monthly detail strip
+    const strip = document.getElementById('catDetailStrip');
+    if (mActiveCat) {
+      const total = txs.reduce((s,t) => s + t.amount, 0);
+      document.getElementById('catDetailName').textContent  = label;
+      document.getElementById('catDetailCount').textContent = `${txs.length} položiek · ${MONTHS_FULL[currentMonth]} ${currentYear}`;
+      document.getElementById('catDetailSum').textContent   = '−' + fmt(total);
+      strip.classList.add('visible');
+    } else { strip.classList.remove('visible'); }
+  }
+
+  // ── PIE FULLSCREEN MODAL ──
+  let pieModalScope = 'monthly';
+  let pieModalMode  = 'expense';
+
+  function openPieModal(scope) {
+    pieModalScope = scope;
+    pieModalMode  = scope === 'monthly' ? mPieMode : yPieMode;
+    document.getElementById('pieModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderPieModal();
+  }
+
+  function closePieModal() {
+    document.getElementById('pieModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function setPieModalMode(mode) {
+    pieModalMode = mode;
+    document.getElementById('pmTabExp').className = 'pie-modal-tab' + (mode === 'expense' ? ' active-expense' : '');
+    document.getElementById('pmTabInc').className = 'pie-modal-tab' + (mode === 'income'  ? ' active-income'  : '');
+    renderPieModal();
+  }
+
+  function renderPieModal() {
+    const txs   = pieModalScope === 'monthly' ? monthTransactions() : yearTransactions(currentYear);
+    const data  = groupByCategory(txs, pieModalMode);
+    const total = data.reduce((s,d) => s + d.total, 0);
+    const color = pieModalMode === 'expense' ? 'var(--expense)' : 'var(--income)';
+    const scopeLabel = pieModalScope === 'monthly'
+      ? MONTHS_FULL[currentMonth] + ' ' + currentYear
+      : 'Rok ' + currentYear;
+
+    document.getElementById('pieModalTitle').textContent =
+      (pieModalMode === 'expense' ? 'Výdaje' : 'Príjmy') + ' · ' + scopeLabel;
+    document.getElementById('pmTabExp').className = 'pie-modal-tab' + (pieModalMode === 'expense' ? ' active-expense' : '');
+    document.getElementById('pmTabInc').className = 'pie-modal-tab' + (pieModalMode === 'income'  ? ' active-income'  : '');
+
+    // Draw big canvas
+    const canvas = document.getElementById('pieModalCanvas');
+    const ctx    = canvas.getContext('2d');
+    const size   = canvas.width;
+    const cx = size/2, cy = size/2 - 6, r = size/2 - 14, ir = r * 0.52;
+    ctx.clearRect(0,0,size,size);
+
+    if (total === 0 || data.length === 0) {
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.strokeStyle='#2a2a2a'; ctx.lineWidth=(r-ir); ctx.stroke();
+      document.getElementById('pieModalTotal').textContent = '0,00 €';
+      document.getElementById('pieModalLbl').textContent   = pieModalMode === 'expense' ? 'výdaje' : 'príjmy';
+      document.getElementById('pieModalLegend').innerHTML  = '<div style="text-align:center;color:var(--muted);padding:20px 0;font-size: 16px">Žiadne dáta</div>';
+      return;
+    }
+
+    draw3dPie(ctx, data, total, cx, cy, r, ir, 16, '#0f0f0f');
+
+    document.getElementById('pieModalTotal').textContent = fmt(total);
+    document.getElementById('pieModalTotal').style.color = color;
+    document.getElementById('pieModalLbl').textContent   = pieModalMode === 'expense' ? 'výdaje' : 'príjmy';
+
+    // Legend
+    const maxAmt = data[0].total;
+    document.getElementById('pieModalLegend').innerHTML = data.map((item,i) => {
+      const pct    = Math.round((item.total/total)*100);
+      const barPct = Math.round((item.total/maxAmt)*100);
+      const col    = PALETTE[i%PALETTE.length];
+      return `<div class="pie-modal-legend-item">
+        <div class="pie-modal-legend-dot" style="background:${col}"></div>
+        <div class="pie-modal-legend-name">${item.name}</div>
+        <div class="pie-modal-legend-bar-wrap">
+          <div class="pie-modal-legend-bar" style="width:${barPct}%;background:${col}"></div>
+        </div>
+        <div class="pie-modal-legend-right">
+          <div class="pie-modal-legend-pct" style="color:${col}">${pct}%</div>
+          <div class="pie-modal-legend-amt">${fmt(item.total, true)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Close on ESC
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePieModal(); });
+
+  // ── DARK MODE ──
+  let darkMode = localStorage.getItem('rozpocet_dark') === '1';
+  function applyDark() {
+    document.body.classList.toggle('dark', darkMode);
+    const toggle = document.getElementById('darkToggle');
+    if (toggle) toggle.classList.toggle('on', darkMode);
+    // Fix pie donut colors
+    const bg = darkMode ? '#1E140C' : '#F0E6D8';
+    document.querySelectorAll('canvas').forEach(() => {}); // will re-draw on next render
+  }
+  function toggleDark() {
+    darkMode = !darkMode;
+    localStorage.setItem('rozpocet_dark', darkMode ? '1' : '0');
+    applyDark();
+    render();
+  }
+  applyDark();
+
+  // ── ANIMATED NUMBER COUNT-UP ──
+  function animateValue(el, from, to, duration) {
+    if (from === to) { el.textContent = fmt(to); return; }
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / duration, 1);
+      // ease out cubic
+      const ease = 1 - Math.pow(1 - p, 3);
+      const val = from + (to - from) * ease;
+      el.textContent = fmt(val);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = fmt(to);
+    }
+    requestAnimationFrame(step);
+    el.classList.remove('num-pop'); void el.offsetWidth; el.classList.add('num-pop');
+  }
+
+  // Store previous balance values for animation
+  let prevIncome = 0, prevExpense = 0, prevBalance = 0;
+
+  function updateBalanceAnimated(income, expense) {
+    const balance = income - expense;
+    const incEl  = document.getElementById('totalIncome');
+    const expEl  = document.getElementById('totalExpense');
+    const balEl  = document.getElementById('totalBalance');
+    animateValue(incEl,  prevIncome,  income,  400);
+    animateValue(expEl,  prevExpense, expense, 400);
+    animateValue(balEl,  prevBalance, balance, 500);
+    // Color balance red if negative
+    balEl.style.color = balance < 0 ? 'var(--red)' : balance === 0 ? 'rgba(255,255,255,0.4)' : '#E8A84A';
+    prevIncome  = income;
+    prevExpense = expense;
+    prevBalance = balance;
+  }
+
+  // ── REPEAT TRANSACTION ──
+  function repeatTransaction(id) {
+    const t = transactions.find(x => x.id === id);
+    if (!t) return;
+    transactions.unshift({
+      id: Date.now(), type: t.type, amount: t.amount, desc: t.desc,
+      note: t.note || '',
+      month: monthKey(currentYear, currentMonth),
+      date: new Date().toLocaleDateString('sk-SK')
+    });
+    saveAll(); render();
+  }
+
+  // ── MONTH COMPARISON ──
+  function renderComparison(income, expense) {
+    const bar = document.getElementById('compareBar');
+    const icon = document.getElementById('compareIcon');
+    const text = document.getElementById('compareText');
+    // Get prev month
+    let pm = currentMonth - 1, py = currentYear;
+    if (pm < 0) { pm = 11; py--; }
+    const prevTxs    = monthTransactions(py, pm);
+    const prevExp    = prevTxs.filter(t => t.type === 'expense').reduce((s,t) => s + t.amount, 0);
+    const prevInc    = prevTxs.filter(t => t.type === 'income').reduce((s,t) => s + t.amount, 0);
+    if (prevTxs.length === 0) { bar.style.display = 'none'; return; }
+    bar.style.display = 'flex';
+    const diff = expense - prevExp;
+    const diffInc = income - prevInc;
+    let html = '';
+    if (Math.abs(diff) < 0.01) {
+      icon.textContent = '📊';
+      html = `Výdaje rovnaké ako <strong>${MONTHS_FULL[pm]}</strong> <span class="same">(${fmt(expense, true)})</span>`;
+    } else if (diff > 0) {
+      icon.textContent = '📈';
+      html = `Výdaje o <span class="up">+${fmt(diff, true)}</span> viac ako <strong>${MONTHS_FULL[pm]}</strong>`;
+    } else {
+      icon.textContent = '📉';
+      html = `Výdaje o <span class="down">${fmt(Math.abs(diff), true)}</span> menej ako <strong>${MONTHS_FULL[pm]}</strong>`;
+    }
+    text.innerHTML = html;
+  }
+
+  // ── SETTINGS PANEL ──
+  // ── TOAST ──
+  function showToast(msg, duration=2200) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  // ── CUSTOM CONFIRM ──
+  let confirmCallback = null;
+  function showConfirm(title, desc, onOk) {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmDesc').textContent  = desc;
+    confirmCallback = onOk;
+    document.getElementById('confirmOverlay').classList.add('open');
+    document.getElementById('confirmOkBtn').onclick = () => { closeConfirm(); onOk(); };
+  }
+  function closeConfirm() {
+    document.getElementById('confirmOverlay').classList.remove('open');
+    confirmCallback = null;
+  }
+
+  function clearMonthFromSettings() {
+    closeSettings();
+    setTimeout(() => { setView('monthly'); clearMonth(); }, 200);
+  }
+
+  function toggleSettings() {
+    const btn   = document.getElementById('settingsBtn');
+    const panel = document.getElementById('settingsPanel');
+    const ov    = document.getElementById('settingsOverlay');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    ov.classList.toggle('open', open);
+  }
+  function closeSettings() {
+    document.getElementById('settingsPanel').classList.remove('open');
+    document.getElementById('settingsBtn').classList.remove('open');
+    document.getElementById('settingsOverlay').classList.remove('open');
+  }
+
+  function render() {
+    if (currentView === 'monthly')     renderMonthly();
+    else if (currentView === 'yearly') renderYearly();
+    else if (currentView === 'fixed')  renderFixed();
+  }
+
+  document.getElementById('amountInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTransaction(); });
+
+  // Default: Výdaj aktívny
+  document.querySelector('.expense-btn').classList.add('active');
+  const defLabel = document.getElementById('selectedTypeLabel');
+  defLabel.textContent = '✓ Výdaj vybraný';
+  defLabel.style.color = 'var(--expense)';
+
+  // Apply fixed to current month on load
+  ensureFixedApplied();
+  rebuildCustomCatOptions();
+  render();
+
+  // Inline service worker via blob
+  if ('serviceWorker' in navigator) {
+    const swCode = `const CACHE='rozpocet-v1';
+self.addEventListener('install',e=>{self.skipWaiting();});
+self.addEventListener('activate',e=>{self.clients.claim();});
+self.addEventListener('fetch',e=>{
+  e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request)));
+});`;
+    const blob = new Blob([swCode], {type:'text/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  }
+</script>
+</body>
+</html>
